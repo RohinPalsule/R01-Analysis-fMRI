@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --job-name=loc_classify
+#SBATCH --output=loc_%j.out
+#SBATCH --error=loc_%j.err
+#SBATCH --time=12:00:00
+#SBATCH --mail-type=end
+#SBATCH --mail-user=rapalsul@uci.edu
+#SBATCH --mem=16G
+
+# activate your env
+source ~/.bashrc
+conda activate mvpa_env
+
+# go to your directory
+cd /share/crsp/lab/bornstea/share/R01-Analysis/Classifier
+
+python classify_phase2_loc.py

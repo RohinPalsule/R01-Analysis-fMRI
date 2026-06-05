@@ -1,0 +1,46 @@
+----------.
+predictions\targets  1.0   2.0  3.0  4.0
+            `------   ---  ---  ---  --- P'  N'   FP   FN   PPV  NPV  TPR  SPC  FDR  MCC   F1
+        1.0           4     2    1    3  10  12    6    5   0.4 0.58 0.44 0.54  0.6 -0.01 0.42
+        2.0           2     4    3    4  13  12    9    5  0.31 0.58 0.44 0.44 0.69 -0.09 0.36
+        3.0           2     2    2    1   7  16    5    7  0.29 0.56 0.22 0.64 0.71  -0.1 0.25
+        4.0           1     1    3    1   6  18    5    8  0.17 0.56 0.11 0.67 0.83 -0.19 0.13
+Per target:           ---  ---  ---  ---
+         P            9     9    9    9
+         N            27   27   27   27
+         TP           4     4    2    1
+         TN           7     7    9   10
+Summary \ Means:      ---  ---  ---  ---  9 14.5 6.25 6.25 0.29 0.57 0.31 0.57 0.71  -0.1 0.29
+       CHI^2         8.44 p=0.9
+        ACC          0.31
+        ACC%        30.56
+     # of sets        3
+
+Statistics computed in 1-vs-rest fashion per each target.
+Abbreviations (for details see http://en.wikipedia.org/wiki/ROC_curve):
+ TP : true positive (AKA hit)
+ TN : true negative (AKA correct rejection)
+ FP : false positive (AKA false alarm, Type I error)
+ FN : false negative (AKA miss, Type II error)
+ TPR: true positive rate (AKA hit rate, recall, sensitivity)
+      TPR = TP / P = TP / (TP + FN)
+ FPR: false positive rate (AKA false alarm rate, fall-out)
+      FPR = FP / N = FP / (FP + TN)
+ ACC: accuracy
+      ACC = (TP + TN) / (P + N)
+ SPC: specificity
+      SPC = TN / (FP + TN) = 1 - FPR
+ PPV: positive predictive value (AKA precision)
+      PPV = TP / (TP + FP)
+ NPV: negative predictive value
+      NPV = TN / (TN + FN)
+ FDR: false discovery rate
+      FDR = FP / (FP + TP)
+ MCC: Matthews Correlation Coefficient
+      MCC = (TP*TN - FP*FN)/sqrt(P N P' N')
+ F1 : F1 score
+      F1 = 2TP / (P + P') = 2TP / (2TP + FP + FN)
+ AUC: Area under (AUC) curve
+ CHI^2: Chi-square of confusion matrix
+ LOE(ACC): Linear Order Effect in ACC across sets
+ # of sets: number of target/prediction sets which were provided

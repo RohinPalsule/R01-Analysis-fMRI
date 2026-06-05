@@ -1,0 +1,7 @@
+{
+  "RawSources": [
+    "sub-5152/ses-1/anat/sub-5152_ses-1_acq-mprage_T1w.nii.gz",
+    "sub-5152/ses-2/anat/sub-5152_ses-2_acq-mprage_T1w.nii.gz"
+  ],
+  "Type": "Brain"
+}

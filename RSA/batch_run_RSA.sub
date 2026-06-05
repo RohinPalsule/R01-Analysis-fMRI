@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#SBATCH --job-name=RSA      ## Name of the job.
+#SBATCH -A bornstea_lab     ## account to charge
+#SBATCH -p standard          ## partition/queue name
+#SBATCH --nodes=1            ## (-N) number of nodes to use
+#SBATCH --ntasks=1           ## (-n) number of tasks to launch
+#SBATCH --error=slurm-%J.err	## error log file
+#SBATCH --time=24:00:00
+#SBATCH --mail-type=end               ## send email when the job ends
+#SBATCH --mail-user=rapalsul@uci.edu  ## use this email address
+#SBATCH --array=0 # Arrays depending on length of sublist
+
+# Load environment
+source ~/.bashrc
+conda activate mvpa_env
+module load fsl/6.0.4
+
+# Get the subject corresponding to this array index
+SUBJECT=$(sed -n "$((SLURM_ARRAY_TASK_ID+1))p" sublist_initials.txt)
+SUBJECT_ID=${SUBJECT%%_*}
+
+# If error
+# N=$(wc -l < subjects.txt)
+# sbatch --array=0-$((N-1)) batch_run_functional_smoothing.sh
+
+
+# Runs smoothing for each subject in your sublist
+python sl_prepost_SN.py "$SUBJECT_ID" gm 3 1000
+exit
+

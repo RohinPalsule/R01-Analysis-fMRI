@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#SBATCH --job-name=isc
+#SBATCH --nodes=2
+#SBATCH --time=24:00:00
+#SBATCH --array=1-6
+#SBATCH --error=slurm-%A_%a.err
+#SBATCH --output=slurm-%A_%a.out
+#SBATCH --mail-type=end
+#SBATCH --mail-user=rapalsul@uci.edu
+#SBATCH --mem=16G
+
+source ~/.bashrc
+conda activate base
+module load fsl/6.0.4
+
+# Get subject ID from sublist
+SUB=$(sed -n "${SLURM_ARRAY_TASK_ID}p" sublist.txt)
+
+RAW_DIR=/share/crsp/lab/bornstea/share/R01-fmri/fmriprep_pepolar/sub-${SUB}/ses-3/func
+
+echo "Running subject: sub-${SUB}"
+
+# Merge PRE runs
+
+#fslmerge -t combined_prepost/raw/sub-${SUB}_pre_combined.nii.gz \
+#    ${RAW_DIR}/sub-${SUB}_ses-3_task-StimExposure_run-1_space-T1w_desc-preproc_bold.nii.gz \
+   # ${RAW_DIR}/sub-${SUB}_ses-3_task-StimExposure_run-2_space-T1w_desc-preproc_bold.nii.gz \
+    #${RAW_DIR}/sub-${SUB}_ses-3_task-StimExposure_run-3_space-T1w_desc-preproc_bold.nii.gz
+
+# Merge POST runs
+#fslmerge -t combined_prepost/raw/sub-${SUB}_post_combined.nii.gz \
+    #${RAW_DIR}/sub-${SUB}_ses-3_task-StimExposure_run-4_space-T1w_desc-preproc_bold.nii.gz \
+    #${RAW_DIR}/sub-${SUB}_ses-3_task-StimExposure_run-5_space-T1w_desc-preproc_bold.nii.gz \
+    #${RAW_DIR}/sub-${SUB}_ses-3_task-StimExposure_run-6_space-T1w_desc-preproc_bold.nii.gz
+
+# Run ISC
+
+
+python3 isc-tutorial/isc_tutorial/isc_cli.py \
+    -i combined_prepost/smoothed/sub-${SUB}_pre_combined_sm4.nii.gz combined_prepost/smoothed/sub-${SUB}_post_combined_sm4.nii.gz \
+    -o output/sub-${SUB}_isc_T1w.nii.gz \
+    -m ../RSA/transformed_masks/sub-${SUB}/roi_t/b_gray_dilD_2mm.nii.gz \
+    --fisherz

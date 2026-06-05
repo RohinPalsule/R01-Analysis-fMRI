@@ -1,0 +1,10 @@
+{
+  "AcquisitionDuration": 1335.9,
+  "DelayTime": 0.10000000000000009,
+  "RepetitionTime": 2,
+  "Resolution": "Template MNI152NLin6Asym (2.0x2.0x2.0 mm^3), curated by TemplateFlow 23.0.0",
+  "SkullStripped": false,
+  "SliceTimingCorrected": true,
+  "StartTime": 0.95,
+  "TaskName": "ChoiceCB"
+}

@@ -1,0 +1,45 @@
+----------.
+predictions\targets   1.0    2.0    3.0
+            `------  -----  -----  -----  P'   N'     FP    FN   PPV  NPV  TPR  SPC  FDR  MCC  F1
+        1.0           33     17     39    89   206    56    75  0.37 0.64 0.31  0.7 0.63 0.01 0.34
+        2.0           30     73     11   114   126    41    35  0.64 0.72 0.68 0.69 0.36 0.28 0.66
+        3.0           45     18     58   121   156    63    50  0.48 0.68 0.54 0.63 0.52 0.14 0.51
+Per target:          -----  -----  -----
+         P            108    108    108
+         N            216    216    216
+         TP           33     73     58
+         TN           131    91     106
+Summary \ Means:     -----  -----  ----- 108 162.67 53.33 53.33  0.5 0.68 0.51 0.67  0.5 0.14  0.5
+       CHI^2         91.61 p=2.2e-16
+        ACC          0.51
+        ACC%         50.62
+     # of sets         3
+
+Statistics computed in 1-vs-rest fashion per each target.
+Abbreviations (for details see http://en.wikipedia.org/wiki/ROC_curve):
+ TP : true positive (AKA hit)
+ TN : true negative (AKA correct rejection)
+ FP : false positive (AKA false alarm, Type I error)
+ FN : false negative (AKA miss, Type II error)
+ TPR: true positive rate (AKA hit rate, recall, sensitivity)
+      TPR = TP / P = TP / (TP + FN)
+ FPR: false positive rate (AKA false alarm rate, fall-out)
+      FPR = FP / N = FP / (FP + TN)
+ ACC: accuracy
+      ACC = (TP + TN) / (P + N)
+ SPC: specificity
+      SPC = TN / (FP + TN) = 1 - FPR
+ PPV: positive predictive value (AKA precision)
+      PPV = TP / (TP + FP)
+ NPV: negative predictive value
+      NPV = TN / (TN + FN)
+ FDR: false discovery rate
+      FDR = FP / (FP + TP)
+ MCC: Matthews Correlation Coefficient
+      MCC = (TP*TN - FP*FN)/sqrt(P N P' N')
+ F1 : F1 score
+      F1 = 2TP / (P + P') = 2TP / (2TP + FP + FN)
+ AUC: Area under (AUC) curve
+ CHI^2: Chi-square of confusion matrix
+ LOE(ACC): Linear Order Effect in ACC across sets
+ # of sets: number of target/prediction sets which were provided

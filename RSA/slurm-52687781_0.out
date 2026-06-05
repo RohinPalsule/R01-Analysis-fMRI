@@ -1,0 +1,34 @@
+16
+21
+16
+9
+4
+WARNING: Detected incorrect (nan) scl_ fields. Resetting to scl_slope=1.0 and scl_inter=0.0
+ * Please note: warnings are printed only once, but underlying problem might occur many times *
+<Dataset: 78x106974@float64, <sa: node,phase,run,time_coords,time_indices>, <fa: voxel_indices>, <a: imgaffine,imghdr,imgtype,mapper,voxel_dim,voxel_eldim>>
+<SampleAttributesCollection: node,phase,run,time_coords,time_indices>
+TRUE DIST: 
+
+init sorted true [-1.43166795 -1.43166795 -1.41801167 -1.41801167 -1.35967359 -1.35967359
+ -1.28258489 -1.28258489 -1.23669695 -1.23669695]
+
+
+
+mean:  -0.10110973898391573
+
+mask shape:  (39, 39, 5)
+
+random_dsm shape:  (39, 39)
+
+rand stat:  -0.03795454973687601
+init sorted true [-1.43166795 -1.43166795 -1.41801167 -1.41801167 -1.35967359 -1.35967359
+ -1.28258489 -1.28258489 -1.23669695 -1.23669695]
+
+
+
+random sorted  [-1.43166795 -1.43166795 -1.41801167 -1.41801167 -1.35967359 -1.35967359
+ -1.28258489 -1.28258489 -1.23669695 -1.23669695]
+
+Permutation statistic:  0.15857972975384338
+<Dataset: 1x106974@float64, <fa: center_ids>, <a: mapper>>
+searchlight complete
