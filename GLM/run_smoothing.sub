@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --job-name=smoothing      ## Name of the job.
+#SBATCH -A bornstea_lab     ## account to charge
+#SBATCH --nodes=1            ## (-N) number of nodes to use
+#SBATCH --time=24:00:00
+#SBATCH --mail-type=end               ## send email when the job ends
+#SBATCH --mail-user=rapalsul@uci.edu  ## use this email address
+#SBATCH --mem=16G
+
+SUBJECT_ID=5159
+FMRIPREP_DIR="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/func/"
+OUTPUT_DIR="./smoothed_func/sub-${SUBJECT_ID}/"
+FWHM=6
+
+echo "Smoothing subject: ${SUBJECT_ID}"
+
+./smooth_glm.sh "$FMRIPREP_DIR" "$OUTPUT_DIR" "$FWHM"

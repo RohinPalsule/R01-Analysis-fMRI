@@ -22,9 +22,9 @@ sigma=$(python3 -c "print($fwhm / 2.355)")
 echo "FWHM: $fwhm mm"
 echo "Sigma: $sigma mm"
 
-for file in "$indir"/*.nii; do
+for file in "$indir"/*_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold.nii.gz; do
 (
-    base=$(basename "$file" .nii)
+    base=$(basename "$file" .nii.gz)
     out="$outdir/${base}_sm${fwhm}.nii"
     fslmaths "$file" -s "$sigma" "$out"
 ) &
