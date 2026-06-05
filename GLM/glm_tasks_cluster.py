@@ -332,6 +332,6 @@ class GWF_StudyGLM:
 
 
 if __name__ == "__main__":
-    glm = LocalizerGLM()
+    glm = GWF_StudyGLM()
     fit_glm = glm.fit_glm()
     glm.plot_contrast_map(glm=fit_glm,name=f"{glm.SUB_ID}_weighted_late>early",contrasts=[-1,-0.5,-0.5,1])
