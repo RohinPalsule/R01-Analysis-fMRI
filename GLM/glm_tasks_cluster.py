@@ -1,5 +1,6 @@
 # GLM
 import os
+import sys
 import glob
 from nilearn.image import mean_img
 from nilearn.plotting import plot_anat, plot_img, plot_stat_map, show
@@ -330,9 +331,9 @@ class GWF_StudyGLM:
         )
         show()
 
-import sys
-
 if __name__ == "__main__":
-    glm = GWF_StudyGLM(sub_id="5152")
+    sub_id = sys.argv[1]
+
+    glm = GWF_StudyGLM(sub_id=str(sub_id))
     fit_glm = glm.fit_glm()
     glm.plot_contrast_map(glm=fit_glm,name=f"{glm.SUB_ID}_weighted_late_early",contrasts=[-1,-0.5,-0.5,1])
