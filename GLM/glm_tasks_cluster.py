@@ -191,7 +191,7 @@ class GWF_StudyGLM:
         self.study_path = f"{bold_dir}/sub-{self.SUB_ID}/"
 
         # Grabs and sorts functional localizer scans in order
-        self.func_scans = glob.glob(os.path.join(self.study_path,f"sub-{self.SUB_ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold_sm6.nii"))
+        self.func_scans = glob.glob(os.path.join(self.study_path,f"sub-{self.SUB_ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold_sm6.nii.gz"))
         self.func_scans = sorted(self.func_scans)
 
         # Creates a path for Localzier outputs

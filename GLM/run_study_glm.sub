@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH --job-name=glm      ## Name of the job.
+#SBATCH -A bornstea_lab     ## account to charge
+#SBATCH --nodes=1            ## (-N) number of nodes to use
+#SBATCH --time=24:00:00
+#SBATCH --mail-type=end               ## send email when the job ends
+#SBATCH --mail-user=rapalsul@uci.edu  ## use this email address
+#SBATCH --mem=16G
+
+
+python3 glm_tasks_cluster.py
+echo "All done!"
