@@ -64,6 +64,7 @@ class LocalizerGLM:
             drift_model="cosine",
             high_pass=1/128,
             verbose=1,
+            mask_img=f"MNI_masks/sub-{self.SUB_ID}/b_gray_dilD_2mm.nii.gz"
         )
         return fmri_glm
     
