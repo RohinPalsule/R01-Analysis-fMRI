@@ -191,7 +191,7 @@ class GWF_StudyGLM:
         self.study_path = f"{bold_dir}/sub-{self.SUB_ID}/"
 
         # Grabs and sorts functional localizer scans in order
-        self.func_scans = glob.glob(os.path.join(self.study_path,f"sub-{self.SUB_ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold_sm6.nii.gz"))
+        self.func_scans = glob.glob(os.path.join(self.study_path,f"sub-{self.SUB_ID}_ses-3_task-StudyGW_space-T1w_desc-preproc_bold_sm6.nii.gz"))
         self.func_scans = sorted(self.func_scans)
 
         # Creates a path for Localzier outputs
@@ -218,7 +218,7 @@ class GWF_StudyGLM:
             drift_model="cosine",
             high_pass=1/128,
             verbose=1,
-            mask_img=f"MNI_masks/sub-{self.SUB_ID}/b_gray_dilD_2mm.nii.gz"
+            mask_img=f"../RSA/transformed_masks/sub-{self.SUB_ID}/roi_t/b_gray_dilD_2mm.nii.gz"
         )
         return fmri_glm
     
@@ -330,8 +330,9 @@ class GWF_StudyGLM:
         )
         show()
 
+import sys
 
 if __name__ == "__main__":
-    glm = GWF_StudyGLM()
+    glm = GWF_StudyGLM(sub_id="5152")
     fit_glm = glm.fit_glm()
-    glm.plot_contrast_map(glm=fit_glm,name=f"{glm.SUB_ID}_weighted_late>early",contrasts=[-1,-0.5,-0.5,1])
+    glm.plot_contrast_map(glm=fit_glm,name=f"{glm.SUB_ID}_weighted_late_early",contrasts=[-1,-0.5,-0.5,1])
