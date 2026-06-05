@@ -185,11 +185,10 @@ class GWF_StudyGLM:
     """
     Pipeline and helper functions for getting contrast maps for our GW Study Task
     """
-    def __init__(self,sub_id:str="5159", bold_dir:str=f"/Users/rohinpalsule/Desktop/GLM/",output_dir:str="results/GLM_Study"):
+    def __init__(self,sub_id:str="5159", bold_dir:str=f"smoothed_func",output_dir:str="results/GLM_Study"):
 
         self.SUB_ID = sub_id
-        self.study_path = f"{bold_dir}/sub-{self.SUB_ID}/smoothed/"
-        print("TEST")
+        self.study_path = f"{bold_dir}/sub-{self.SUB_ID}/"
 
         # Grabs and sorts functional localizer scans in order
         self.func_scans = glob.glob(os.path.join(self.study_path,f"sub-{self.SUB_ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold_sm6.nii"))
@@ -219,6 +218,7 @@ class GWF_StudyGLM:
             drift_model="cosine",
             high_pass=1/128,
             verbose=1,
+            mask_img=f"MNI_masks/sub-{self.SUB_ID}/b_gray_dilD_2mm.nii.gz"
         )
         return fmri_glm
     
@@ -226,7 +226,7 @@ class GWF_StudyGLM:
         """
         returns concat_event_dfs which is a list of pd.DataFrames
         """
-        df = pd.read_csv(f"/Users/rohinpalsule/Documents/GitHub/R01-Scanner/GWF-Scanner/results/study.{self.SUB_ID}.result-2-Study.csv",on_bad_lines="skip")
+        df = pd.read_csv(f"study_data/study.{self.SUB_ID}.result-2-Study.csv",on_bad_lines="skip")
 
 
         event_df = df[['trial_timestamp']]
@@ -250,7 +250,7 @@ class GWF_StudyGLM:
         return event_df
 
     def make_confounds_df(self):
-        confound_df = pd.read_csv("/Users/rohinpalsule/Desktop/GLM/sub-5159/sub-5159_ses-3_task-StudyGW_desc-confounds_timeseries.tsv",sep='\t')[['trans_x','trans_y','trans_z','rot_x','rot_y','rot_z']]
+        confound_df = pd.read_csv(f"../../R01-fmri/fmriprep_pepolar/sub-{self.SUB_ID}/ses-3/func/sub-{self.SUB_ID}_ses-3_task-StudyGW_desc-confounds_timeseries.tsv",sep='\t')[['trans_x','trans_y','trans_z','rot_x','rot_y','rot_z']]
 
         return confound_df
 
@@ -262,21 +262,21 @@ class GWF_StudyGLM:
 
         return fit_glm
 
-    def plot_loc_design_matrix(self,run_idx):
-        """
-        Visualizes the design matrix for a localizer run
-        """
-        glm = self.fit_glm()
-        design_matrix = glm.design_matrices_[run_idx]
-        plot_design_matrix(design_matrix)
-        show()
-        # Shows each stim type and its HRF
-        plt.plot(design_matrix["objects"])
-        plt.plot(design_matrix["scenes"])
-        plt.plot(design_matrix["scrambled"])
-        plt.xlabel("Seconds")
-        plt.title("Scene Response")
-        show()
+    # def plot_loc_design_matrix(self,run_idx):
+    #     """
+    #     Visualizes the design matrix for a localizer run
+    #     """
+    #     glm = self.fit_glm()
+    #     design_matrix = glm.design_matrices_[run_idx]
+    #     plot_design_matrix(design_matrix)
+    #     show()
+    #     # Shows each stim type and its HRF
+    #     plt.plot(design_matrix["objects"])
+    #     plt.plot(design_matrix["scenes"])
+    #     plt.plot(design_matrix["scrambled"])
+    #     plt.xlabel("Seconds")
+    #     plt.title("Scene Response")
+    #     show()
 
     def make_contrast_map(self,glm,block_1:int,block_2:int,block_3:int,block_4:int):
         if glm is None:
@@ -332,6 +332,6 @@ class GWF_StudyGLM:
 
 
 if __name__ == "__main__":
-    glm_analysis = LocalizerGLM()
-    fmri_img = glm_analysis.func_scans
-    concat_event_dfs = glm_analysis.make_events_df()
+    glm = LocalizerGLM()
+    fit_glm = glm.fit_glm()
+    glm.plot_contrast_map(glm=fit_glm,name=f"{glm.SUB_ID}_weighted_late>early",contrasts=[-1,-0.5,-0.5,1])
