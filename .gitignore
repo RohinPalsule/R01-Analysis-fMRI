@@ -4,3 +4,5 @@
 *.gii
 *.h5
 .DS_Store
+*.out
+*.err
