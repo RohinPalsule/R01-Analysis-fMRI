@@ -6,8 +6,7 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=rapalsul@uci.edu
 #SBATCH --mem=16G
-#SBATCH --array=1-5
-
+#SBATCH --array=1
 SUBJECT_ID=$(sed -n "$((SLURM_ARRAY_TASK_ID))p" sublist.txt)
 
 FMRIPREP_DIR="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/func/"

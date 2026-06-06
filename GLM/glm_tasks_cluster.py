@@ -336,4 +336,4 @@ if __name__ == "__main__":
 
     glm = GWF_StudyGLM(sub_id=str(sub_id))
     fit_glm = glm.fit_glm()
-    glm.plot_contrast_map(glm=fit_glm,name=f"{glm.SUB_ID}_weighted_late_early",contrasts=[-1,-0.5,-0.5,1])
+    glm.plot_contrast_map(glm=fit_glm,name=f"{glm.SUB_ID}_pure_late_early",contrasts=[-1,0,0,1])

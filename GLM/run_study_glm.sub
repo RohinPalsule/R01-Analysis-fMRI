@@ -6,7 +6,11 @@
 #SBATCH --mail-type=end               ## send email when the job ends
 #SBATCH --mail-user=rapalsul@uci.edu  ## use this email address
 #SBATCH --mem=16G
+#SBATCH --array=1
 
+SUBS=($(cat sublist.txt))
 
-python3 glm_tasks_cluster.py
+SUB_ID=${SUBS[$SLURM_ARRAY_TASK_ID-1]}
+
+python3 glm_tasks_cluster.py $SUB_ID
 echo "All done!"
