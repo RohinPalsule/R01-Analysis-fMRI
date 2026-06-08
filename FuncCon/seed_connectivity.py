@@ -2,16 +2,17 @@
 import os
 import sys
 import glob
-from nilearn import datasets, plotting
+from nilearn import datasets, plotting, image
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from nilearn.maskers import NiftiSpheresMasker
 from nilearn.maskers import NiftiMasker
+from nilearn.maskers import NiftiLabelsMasker
 from pathlib import Path
 
 class SeedConnectivity():
-    def __init__(self,sub_id:int=5159,bold_path:str='/Users/rohinpalsule/Desktop/GLM/'):
+    def __init__(self,sub_id:int=5159,bold_path:str='/Users/rohinpalsule/Desktop/GLM/',seed_region:str="Hippocampus"):
         self.ID = sub_id
         self.func_filename = os.path.join(bold_path,f'sub-{self.ID}',f'sub-{self.ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold.nii.gz')
 
@@ -23,9 +24,11 @@ class SeedConnectivity():
 
         self.output_dir = Path.cwd() / "results" / "plot_seed_to_voxel_correlation"
         self.output_dir.mkdir(exist_ok=True, parents=True)
+        self.seed_region="seed_region"
         print(f"Output will be saved to: {self.output_dir}")
+        print(f"Running seed for {self.seed_region}. Make sure coordinates are correct!")
         
-    def get_seed(self):
+    def get_sphere_seed(self):
         seed_masker = NiftiSpheresMasker(
             self.seed_sphere_coords,
             radius=8,
@@ -38,6 +41,37 @@ class SeedConnectivity():
             memory="nilearn_cache",
             memory_level=1,
             verbose=1,
+        )
+        return seed_masker
+    
+    def get_subco_seed(self,coords:tuple=(9,19),bilateral:bool=True):
+        """
+        Different way to get seed 
+        \n IMPORTANT: if only left/right, make coords a tuple (l,r) with the empty one == 0 and set bilateral to False
+        """
+        sub_atlas = datasets.fetch_atlas_harvard_oxford("sub-maxprob-thr25-2mm")
+        # sub_labels = sub_atlas.labels
+
+        if bilateral:
+            l_mask = image.math_img(f"img == {coords[0]}", img=sub_atlas.maps) # l_hippocampus
+            r_mask = image.math_img(f"img == {coords[1]}", img=sub_atlas.maps) # r_hippocampus
+
+            b_mask = image.math_img(
+                "img1 + img2",
+                img1=l_mask,
+                img2=r_mask
+            )
+        else:
+            b_mask = image.math_img(f"img == {np.max(coords)}", img=sub_atlas.maps) # l_hippocampus
+
+        seed_masker = NiftiMasker(
+            mask_img=b_mask,
+            detrend=True,
+            standardize=True,
+            standardize_confounds=True,
+            low_pass=0.1,
+            high_pass=0.01,
+            t_r=2,
         )
         return seed_masker
     
@@ -133,7 +167,7 @@ class SeedConnectivity():
         """
         Main workflow that generates fisher z nifit files for a specified seed
         """
-        seed_masker = self.get_seed()
+        seed_masker = self.get_subco_seed()
         seed_time_series = self.fit_seed(seed_masker)
         brain_masker = self.mask_timeseries()
         brain_time_series = self.fit_timeseries(brain_masker)
