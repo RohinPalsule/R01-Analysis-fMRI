@@ -12,12 +12,12 @@ from nilearn.maskers import NiftiLabelsMasker
 from pathlib import Path
 
 class SeedConnectivity():
-    def __init__(self,sub_id:int=5159,bold_path:str='/Users/rohinpalsule/Desktop/GLM/',seed_region:str="Hippocampus"):
+    def __init__(self,sub_id:int=5159,bold_path:str='../../R01-fmri/fmriprep_pepolar/',seed_region:str="Hippocampus"):
         self.ID = sub_id
-        self.func_filename = os.path.join(bold_path,f'sub-{self.ID}',f'sub-{self.ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold.nii.gz')
+        self.func_filename = os.path.join(bold_path,f'sub-{self.ID}','ses-3','func',f'sub-{self.ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold.nii.gz')
 
         # Need to deside what we want to use as confounds
-        self.confound_filename = os.path.join(bold_path,f'sub-{self.ID}',f'sub-{self.ID}_ses-3_task-StudyGW_desc-confounds_timeseries_filtered.tsv')
+        self.confound_filename = os.path.join(bold_path,f'sub-{self.ID}','ses-3','func',f'sub-{self.ID}_ses-3_task-StudyGW_desc-confounds_timeseries_filtered.tsv')
 
         # THIS IS THE PCC FROM THE TUTORIAL, NEED TO CHANGE
         self.seed_sphere_coords = [(0, -52, 18)]
@@ -178,6 +178,8 @@ class SeedConnectivity():
         self.save_fisher_nifti(brain_masker,seed_to_voxel_correlations)
 
 if __name__ == "__main__":
-    FC = SeedConnectivity()
+	sub_id=sys.argv[1]
+
+    FC = SeedConnectivity(sub_id=str(sub_id))
     FC.get_seed_connectivity_nifti()
     print("All done!")
