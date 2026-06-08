@@ -24,7 +24,7 @@ class SeedConnectivity():
 
         self.output_dir = Path.cwd() / "results" / "plot_seed_to_voxel_correlation"
         self.output_dir.mkdir(exist_ok=True, parents=True)
-        self.seed_region="seed_region"
+        self.seed_region=seed_region
         print(f"Output will be saved to: {self.output_dir}")
         print(f"Running seed for {self.seed_region}. Make sure coordinates are correct!")
         
@@ -64,8 +64,8 @@ class SeedConnectivity():
         else:
             b_mask = image.math_img(f"img == {np.max(coords)}", img=sub_atlas.maps) # l_hippocampus
 
-        seed_masker = NiftiMasker(
-            mask_img=b_mask,
+        seed_masker = NiftiLabelsMasker(
+            labels_img=b_mask,
             detrend=True,
             standardize=True,
             standardize_confounds=True,
