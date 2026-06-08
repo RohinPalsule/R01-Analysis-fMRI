@@ -65,7 +65,7 @@ class SeedConnectivity():
             b_mask = image.math_img(f"img == {np.max(coords)}", img=sub_atlas.maps) # l_hippocampus
 
         seed_masker = NiftiLabelsMasker(
-            labels_img=b_mask,
+            labels_img=l_mask,
             detrend=True,
             standardize=True,
             standardize_confounds=True,
