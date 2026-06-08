@@ -10,6 +10,7 @@ from nilearn.maskers import NiftiSpheresMasker
 from nilearn.maskers import NiftiMasker
 from nilearn.maskers import NiftiLabelsMasker
 from pathlib import Path
+import pandas as pd
 
 class SeedConnectivity():
     def __init__(self,sub_id:int=5159,bold_path:str='../../R01-fmri/fmriprep_pepolar/',seed_region:str="Hippocampus"):
@@ -27,7 +28,30 @@ class SeedConnectivity():
         self.seed_region=seed_region
         print(f"Output will be saved to: {self.output_dir}")
         print(f"Running seed for {self.seed_region}. Make sure coordinates are correct!")
-        
+    
+    def make_events_df(self):
+        """
+        returns concat_event_dfs which is a list of pd.DataFrames
+        """
+        df = pd.read_csv(f"study_data/study.{self.ID}.result-2-Study.csv",on_bad_lines="skip")
+        # df = pd.read_csv(f"/Users/rohinpalsule/Documents/GitHub/R01-Scanner/GWF-Scanner/results/study.{self.ID}.result-2-Study.csv",on_bad_lines="skip")
+
+        event_df = df[['trial_timestamp']]
+        event_df = event_df.copy()
+        event_df['duration'] = 3
+        event_df['accuracy'] = df['accuracy']
+        event_df = event_df.rename(columns={"trial_timestamp":"onset"})
+        event_df['block'] = np.repeat(np.arange(1, 9), 16)
+        event_df['trial_type']=np.select([event_df['block'].isin([1,2]),
+                                        event_df['block'].isin([3,4]),
+                                        event_df['block'].isin([5,6]),
+                                        event_df['block'].isin([7,8])],
+                                        [1,2,3,4])
+        event_df['trial'] = event_df.index +1
+        event_df[['node_l','node_r',]] = df[['node_l','node_r',]]
+        event_df['TR'] = np.ceil(event_df['onset']/2)
+        return event_df
+
     def get_sphere_seed(self):
         seed_masker = NiftiSpheresMasker(
             self.seed_sphere_coords,
@@ -183,3 +207,4 @@ if __name__ == "__main__":
     FC = SeedConnectivity(sub_id=int(sub_id))
     FC.get_seed_connectivity_nifti()
     print("All done!")
+

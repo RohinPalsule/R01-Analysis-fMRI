@@ -244,7 +244,7 @@ class GWF_StudyGLM:
         event_df['trial'] = event_df.index +1
         event_df[['node_l','node_r',]] = df[['node_l','node_r',]]
         event_df.to_csv(
-            os.path.join(self.output_dir,'sub-5159_ses-03_task-StudyGW_events.tsv'),
+            os.path.join(self.output_dir,f'sub-{self.SUB_ID}_ses-03_task-StudyGW_events.tsv'),
             sep='\t',
             index=False
         )
