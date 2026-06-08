@@ -178,8 +178,7 @@ class SeedConnectivity():
         self.save_fisher_nifti(brain_masker,seed_to_voxel_correlations)
 
 if __name__ == "__main__":
-	sub_id=sys.argv[1]
-
-    FC = SeedConnectivity(sub_id=str(sub_id))
+    sub_id=sys.argv[1]
+    FC = SeedConnectivity(sub_id=int(sub_id))
     FC.get_seed_connectivity_nifti()
     print("All done!")
