@@ -86,6 +86,7 @@ class SeedConnectivity():
         Need to adjust all hyperparameters + add mask (mask_img=)
         """
         brain_masker = NiftiMasker(
+		mask_img=f"MNI_masks/sub-{self.ID}_b_gray_dilD_2mm.nii.gz"
             smoothing_fwhm=6,
             detrend=True,
             standardize_confounds=True,
