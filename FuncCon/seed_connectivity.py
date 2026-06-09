@@ -33,7 +33,7 @@ class SeedConnectivity():
         """
         returns concat_event_dfs which is a list of pd.DataFrames
         """
-        df = pd.read_csv(f"study_data/study.{self.ID}.result-2-Study.csv",on_bad_lines="skip")
+        df = pd.read_csv(f"../GLM/study_data/study.{self.ID}.result-2-Study.csv",on_bad_lines="skip")
         # df = pd.read_csv(f"/Users/rohinpalsule/Documents/GitHub/R01-Scanner/GWF-Scanner/results/study.{self.ID}.result-2-Study.csv",on_bad_lines="skip")
 
         event_df = df[['trial_timestamp']]
