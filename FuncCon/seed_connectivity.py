@@ -99,9 +99,14 @@ class SeedConnectivity():
         )
         return seed_masker
     
-    def fit_seed(self,seed_masker):
+    def fit_seed(self,seed_masker,func_file=None,confound_file=None):
+        if func_file is None:
+            func_file = self.func_filename
+        if confound_file is None:
+            confound_file = self.confound_filename
+        
         seed_time_series = seed_masker.fit_transform(
-            self.func_filename, confounds=[self.confound_filename]
+            func_file, confounds=[confound_file]
         )
         return seed_time_series
     
@@ -124,10 +129,16 @@ class SeedConnectivity():
         )
         return brain_masker
     
-    def fit_timeseries(self,brain_masker):
+    def fit_timeseries(self,brain_masker,func_file=None,confound_file=None):
+        if func_file is None:
+            func_file = self.func_filename
+        if confound_file is None:
+            confound_file = self.confound_filename
+        
         brain_time_series = brain_masker.fit_transform(
-            self.func_filename, confounds=[self.confound_filename]
+            func_file, confounds=[confound_file]
         )
+
         return brain_time_series
     
     def plot_seed_timeseries(self,seed_time_series,region:str='Posterior Cingulate Cortex'):
@@ -178,33 +189,71 @@ class SeedConnectivity():
 
         display.savefig(self.output_dir / "pcc_seed_correlation.pdf")
     
-    def save_fisher_nifti(self,brain_masker,seed_to_voxel_correlations):
+    def save_fisher_nifti(self,brain_masker,seed_to_voxel_correlations,partition=None):
         seed_to_voxel_correlations_fisher_z = np.arctanh(seed_to_voxel_correlations)
         seed_to_voxel_correlations_fisher_z_img = brain_masker.inverse_transform(
             seed_to_voxel_correlations_fisher_z.T
         )
+
+        if partition is None:
+            outfile = f"sub-{self.ID}_{self.seed_region}_seed_correlation_z.nii.gz"
+        else:
+            outfile = f"sub-{self.ID}_{self.seed_region}_seed_{partition}_correlation_z.nii.gz"
+
         seed_to_voxel_correlations_fisher_z_img.to_filename(
-            # Need to change pcc to smth else
-            self.output_dir / f"sub-{self.ID}_pcc_seed_correlation_z.nii.gz"
+            self.output_dir / outfile
         )
     
-    def get_seed_connectivity_nifti(self):
+    def get_seed_connectivity_nifti(self,func_file=None,confound_file=None, partition=None):
         """
         Main workflow that generates fisher z nifit files for a specified seed
         """
         seed_masker = self.get_subco_seed()
-        seed_time_series = self.fit_seed(seed_masker)
+        seed_time_series = self.fit_seed(seed_masker,func_file,confound_file)
         brain_masker = self.mask_timeseries()
-        brain_time_series = self.fit_timeseries(brain_masker)
+        brain_time_series = self.fit_timeseries(brain_masker,func_file,confound_file)
 
         seed_to_voxel_correlations = self.get_seed_voxel_correlations(
             brain_time_series,seed_time_series)
         
-        self.save_fisher_nifti(brain_masker,seed_to_voxel_correlations)
+        self.save_fisher_nifti(brain_masker,seed_to_voxel_correlations,partition)
+    
+    def partition_data(self):
+        """
+        Right now I'm going to partition the data into 4 blocks, and compare late vs early, same as GLM
+        """
+        event_df = self.make_events_df()
+        
+        early_tr = np.array(event_df[event_df['trial_type']==1]['TR'])
+        early_min = int(early_tr.min() - 1)
+        early_max = int(early_tr.max())
+
+        early_confound = pd.read_csv(self.confound_filename,sep='\t').iloc[early_min:early_max].reset_index(drop='index')
+        early_func = image.index_img(self.func_filename, slice(early_min, early_max))
+
+        late_tr = np.array(event_df[event_df['trial_type']==4]['TR'])
+        late_min = int(late_tr.min() - 1)
+        late_max = int(late_tr.max())
+
+        late_confound = pd.read_csv(self.confound_filename,sep='\t').iloc[late_min:late_max].reset_index(drop='index')
+        late_func = image.index_img(self.func_filename, slice(late_min, late_max))
+
+        return (early_func,late_func), (early_confound,late_confound)
+    
+    def run_seed_con_differences(self):
+        """
+        Tuples are (early,late), saves 2 niftis w early and late in filename
+        """
+        func_tup, conf_tup = self.partition_data()
+
+        for i,segment in enumerate(["early","late"]):
+            self.get_seed_connectivity_nifti(func_file=func_tup[i],confound_file=conf_tup[i],partition=segment)
+            print("Finished ", segment)
+
 
 if __name__ == "__main__":
     sub_id=sys.argv[1]
     FC = SeedConnectivity(sub_id=int(sub_id))
-    FC.get_seed_connectivity_nifti()
+    FC.run_seed_con_differences()
     print("All done!")
 
