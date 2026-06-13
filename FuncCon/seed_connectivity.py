@@ -211,6 +211,11 @@ class SeedConnectivity():
             self.output_dir / outfile
         )
     
+    def get_ROI_to_ROI_fisher_z(self,seed_time_series,brain_time_series):
+        r = np.corrcoef(seed_time_series[:,0], brain_time_series[:,0])[0,1]
+        z_value = np.arctanh(r)
+        print(f"Subject {self.ID}\nCorrelation coef: {r}\nFisher Z: {z_value}")
+    
     def get_seed_connectivity_nifti(self,func_file=None,confound_file=None, partition=None):
         """
         Main workflow that generates fisher z nifti files for a specified seed
@@ -220,6 +225,7 @@ class SeedConnectivity():
         brain_masker = self.mask_timeseries(region="OFC")
         brain_time_series = self.fit_timeseries(brain_masker,func_file,confound_file)
 
+        self.get_ROI_to_ROI_fisher_z(seed_time_series=seed_time_series, brain_time_series=brain_time_series)
         seed_to_voxel_correlations = self.get_seed_voxel_correlations(
             brain_time_series,seed_time_series)
         
