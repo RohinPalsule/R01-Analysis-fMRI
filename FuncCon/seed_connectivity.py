@@ -110,18 +110,25 @@ class SeedConnectivity():
         )
         return seed_time_series
     
-    def mask_timeseries(self):
+    def mask_timeseries(self,region="gm"):
         """
         Need to adjust all hyperparameters + add mask (mask_img=)
         """
+        if region == "gm":
+            mask_img = f"MNI_masks/sub-{self.ID}_b_gray_dilD_2mm.nii.gz"
+        elif region == "OFC":
+            data = datasets.fetch_atlas_harvard_oxford("cort-maxprob-thr25-2mm")
+            OFC = image.math_img("img == 33", img=data.maps)
+            mask_img = OFC
+
         brain_masker = NiftiMasker(
-            mask_img=f"MNI_masks/sub-{self.ID}_b_gray_dilD_2mm.nii.gz",
-            smoothing_fwhm=6,
+            mask_img=mask_img,
+            smoothing_fwhm=5,
             detrend=True,
             standardize_confounds=True,
             standardize=True, # The original tutorial did not have this but this is how I got it mean centered and have the correlations interpretable 
             low_pass=0.1,
-            high_pass=0.01,
+            high_pass=0.009,
             t_r=2,
             memory="nilearn_cache",
             memory_level=1,
@@ -206,11 +213,11 @@ class SeedConnectivity():
     
     def get_seed_connectivity_nifti(self,func_file=None,confound_file=None, partition=None):
         """
-        Main workflow that generates fisher z nifit files for a specified seed
+        Main workflow that generates fisher z nifti files for a specified seed
         """
         seed_masker = self.get_subco_seed()
         seed_time_series = self.fit_seed(seed_masker,func_file,confound_file)
-        brain_masker = self.mask_timeseries()
+        brain_masker = self.mask_timeseries(region="OFC")
         brain_time_series = self.fit_timeseries(brain_masker,func_file,confound_file)
 
         seed_to_voxel_correlations = self.get_seed_voxel_correlations(
