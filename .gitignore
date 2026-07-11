@@ -8,3 +8,4 @@
 *.err
 FuncCon/nilearn_cache/
 GLM/test_glm.ipynb
+*.json
