@@ -9,7 +9,7 @@
 #SBATCH --time=24:00:00
 #SBATCH --mail-type=end               ## send email when the job ends
 #SBATCH --mail-user=rapalsul@uci.edu  ## use this email address
-#SBATCH --array=0 # Arrays depending on length of sublist
+#SBATCH --array=1 # Arrays depending on length of sublist
 
 # Load environment
 source ~/.bashrc
@@ -17,7 +17,7 @@ conda activate mvpa_env
 module load fsl/6.0.4
 
 # Get the subject corresponding to this array index
-SUBJECT=$(sed -n "$((SLURM_ARRAY_TASK_ID+1))p" sublist_initials.txt)
+SUBJECT=$(sed -n "$((SLURM_ARRAY_TASK_ID))p" sublist_initials.txt)
 SUBJECT_ID=${SUBJECT%%_*}
 
 # If error

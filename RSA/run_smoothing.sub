@@ -15,4 +15,4 @@ conda activate mindstorm_env
 cd /share/crsp/lab/bornstea/share/R01-Analysis/RSA
 
 # run script
-./smooth_prepost.sh 5169 2
+./smooth_prepost.sh 5191 2
