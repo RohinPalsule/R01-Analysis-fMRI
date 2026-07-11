@@ -30,7 +30,7 @@ elif masktype == 'fsROIS':
 elif masktype == 'mpfcROIS':
 	masks = ['l_mid_ba','r_mid_ba','l_10m','r_10m','l_10p_anterior_ba','r_10p_anterior_ba','l_10r','r_10r','l_11m','r_11m','l_14c','r_14c','l_14r','r_14r','l_24','r_24','l_25','r_25','l_32pl','r_32pl','l_posterior_ba','r_posterior_ba']
 elif masktype == 'grpROI':
-	masks = ['grp_sl_bli_b_gray_p05_863_mask']
+	masks = ['search_l_put','search_l_hip']
 	
 ### directories ###
 subjdir = expdir+f'/transformed_masks/sub-{sbj}/'
@@ -54,7 +54,7 @@ for mask in masks:
 		elif masktype == 'mpfcROIS':
 			rsamask = subjdir+'/../pfc_drawn_MS/%s.nii.gz'%(mask)
 		elif masktype == 'grpROI':
-			rsamask = subjdir+'/anatomy/bbreg/data/grpROI/%s.nii.gz'%(mask)
+			rsamask = subjdir+'/roi_t/%s.nii.gz'%(mask)
 
 		#load in the data
 		ds = fmri_dataset(betadata, mask=rsamask)

@@ -44,15 +44,15 @@ def analyze_prepost(npz_name:str="rsa_results.npz"):
     betas = 0 # If you have multiple beta comparisons can adjust
 
     #subject_list = ['1181','1185','1202','1211','1224','1227']
-    subject_list = ['5153','5159','5152','700','5155','5156','5169','515','516','517','5191']
+    subject_list = ['5153','5159','5152','700','5155','5169','515','516','517','5191']
     subjects = len(subject_list) #number of subjects
 
-    masks = ['l_lo','r_lo','l_erc','r_erc','l_tpo','r_tpo','l_hip','r_hip','l_put','r_put']
+    masks = ['l_lo','r_lo','l_erc','r_erc','l_tpo','r_tpo','l_hip','r_hip','l_put','r_put','search_l_hip','search_l_put']
 
     betaseries = ['prepost']
     thisbeta = betaseries[betas]
 
-    roi_rsa_result = [[],[],[],[],[],[],[],[],[],[]] #Initializes roi_rsa where each list is a mask label and within will be subjectxbin averages
+    roi_rsa_result = [[],[],[],[],[],[],[],[],[],[],[],[]] #Initializes roi_rsa where each list is a mask label and within will be subjectxbin averages
     # directory from which we are working
     dir = os.getcwd()
 

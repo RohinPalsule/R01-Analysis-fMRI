@@ -16,5 +16,5 @@ for sub_id in $(cat sublist_initials.txt); do
     number=${sub_id%%_*}
     echo "Running subject $SUBJECT"
 
-    python PS_rsa.py $number fsROIS
+    python PS_rsa.py $number grpROI
 done

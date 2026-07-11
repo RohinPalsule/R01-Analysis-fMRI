@@ -7,10 +7,10 @@ MASK="${1%.nii.gz}.nii.gz"
 
 for sub_id in $(cat sublist_initials.txt); do
     SUBJECT_ID=${sub_id%%_*}
-
+echo "running subject ${SUBJECT_ID}"
     if [ -f "../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_acq-mprage_desc-preproc_T1w.nii.gz" ]; then
         REF="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_acq-mprage_desc-preproc_T1w.nii.gz"
-        XFM="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5"
+        XFM="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_acq-mprage_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5"
 
     elif [ -f "../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_desc-preproc_T1w.nii.gz" ]; then
         REF="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_desc-preproc_T1w.nii.gz"
@@ -18,7 +18,7 @@ for sub_id in $(cat sublist_initials.txt); do
 
     elif [ -f "../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mpragelowres_desc-preproc_T1w.nii.gz" ]; then
         REF="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mpragelowres_desc-preproc_T1w.nii.gz"
-        XFM="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5"
+        XFM="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mpragelowres_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5"
 
     else
         echo "No anatomical image found for ${SUBJECT_ID}"
