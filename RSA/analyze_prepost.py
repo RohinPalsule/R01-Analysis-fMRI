@@ -47,7 +47,7 @@ def analyze_prepost(npz_name:str="rsa_results.npz"):
     subject_list = ['5153','5159','5152','700','5155','5169','515','516','517','5191']
     subjects = len(subject_list) #number of subjects
 
-    masks = ['l_lo','r_lo','l_erc','r_erc','l_tpo','r_tpo','l_hip','r_hip','l_put','r_put','search_l_hip','search_l_put']
+    masks = ['l_lo','r_lo','l_erc','r_erc','l_tpo','r_tpo','l_hip','r_hip','l_put','r_put','search_l_hip_dilD_2mm','search_l_put_dilD_2mm']
 
     betaseries = ['prepost']
     thisbeta = betaseries[betas]
