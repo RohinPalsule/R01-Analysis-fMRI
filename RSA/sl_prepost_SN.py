@@ -64,7 +64,7 @@ elif masktype == 'mpfcROIS':
 elif masktype == 'func':
 	masks = ['mask']
 elif masktype == 'gm':
-	masks = [f'b_gray_dilD_2mm']
+	masks = [f'b_gray_dilD_3.45mm']
 
 ### searchlight information ###
 phase,run,node = loadtxt(expdir+f'/volinfo/prepost_volinfo.txt',unpack=1)
