@@ -30,7 +30,7 @@ elif masktype == 'fsROIS':
 elif masktype == 'mpfcROIS':
 	masks = ['l_mid_ba','r_mid_ba','l_10m','r_10m','l_10p_anterior_ba','r_10p_anterior_ba','l_10r','r_10r','l_11m','r_11m','l_14c','r_14c','l_14r','r_14r','l_24','r_24','l_25','r_25','l_32pl','r_32pl','l_posterior_ba','r_posterior_ba']
 elif masktype == 'grpROI':
-	masks = ['search_l_put_dilD_2mm','search_l_hip_dilD_2mm']
+	masks = ['search_l_put_dilD_3.45mm','search_l_hip_dilD_3.45mm']
 	
 ### directories ###
 subjdir = expdir+f'/transformed_masks/sub-{sbj}/'

@@ -12,5 +12,5 @@ DILATION=$2
 
 for sub_id in $(cat sublist_initials.txt); do
     SUBJECT_ID=${sub_id%%_*}
-    fslmaths ./transformed_masks/sub-${SUBJECT_ID}/roi_t/${MASK} -kernel sphere $DIALATION -dilD ./transformed_masks/sub-${SUBJECT_ID}/roi_t/${MASK}_dilD_${DILATION}mm
+    fslmaths ./transformed_masks/sub-${SUBJECT_ID}/roi_t/${MASK} -kernel sphere $DILATION -dilD ./transformed_masks/sub-${SUBJECT_ID}/roi_t/${MASK}_dilD_${DILATION}mm
 done
