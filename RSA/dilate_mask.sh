@@ -3,7 +3,7 @@
 module load fsl/6.0.4
 
 if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <mask> <dialation> ex. ./dilate_mask.sh b_gray 2"
+    echo "Usage: $0 <mask> <dialation> ex. ./dilate_mask.sh b_gray 3.45"
     exit 1
 fi
 
