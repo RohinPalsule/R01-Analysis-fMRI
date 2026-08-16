@@ -27,9 +27,9 @@ while read SUB; do
     SUBJECT_ID=${SUB%%_*}
     echo "Processing subject: $SUBJECT_ID with ${RUNS} runs"
 
-    INFILE="./searchlight/${SUBJECT_ID}_${RUNS}_runs_smoothed_prepost_sl_1000_iterations_edge_nonedge_diff_b_gray_dilD_2mm_2mm.nii.gz"
-    OUTFILE="./searchlight/MNI_space/${SUBJECT_ID}_${RUNS}_runs_smoothed_prepost_sl_1000_iter≈ations_edge_nonedge_diff_b_gray_dilD_2mm_2mm_MNI.nii.gz"
-    TRANSFORM="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_acq-mprage_from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5"
+    INFILE="./searchlight/${SUBJECT_ID}_${RUNS}_runs_smoothed_prepost_sl_1000_iterations_edge_nonedge_diff_b_gray_dilD_3.45mm_2mm.nii.gz"
+    OUTFILE="./searchlight/MNI_space/${SUBJECT_ID}_${RUNS}_runs_smoothed_prepost_sl_1000_iter≈ations_edge_nonedge_diff_b_gray_dilD_3.45mm_2mm_MNI.nii.gz"
+    TRANSFORM="../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5"
 
     antsApplyTransforms \
         -d 3 \

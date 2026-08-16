@@ -1,11 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=func_smoothing
-#SBATCH --output=loc_%j.out
-#SBATCH --error=loc_%j.err
+#SBATCH --output=loc_%A_%a.out
+#SBATCH --error=loc_%A_%a.err
 #SBATCH --time=02:00:00
 #SBATCH --mail-type=end
 #SBATCH --mail-user=rapalsul@uci.edu
 #SBATCH --mem=8G
+#SBATCH --array=1-11
 
 # activate your env
 source ~/.bashrc
@@ -14,5 +15,11 @@ conda activate mindstorm_env
 # go to your directory
 cd /share/crsp/lab/bornstea/share/R01-Analysis/RSA
 
+# get the subject id for this array task (one line per task)
+SUBJ_LINE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" sublist_initials.txt)
+SUBJ_NUM=$(echo "$SUBJ_LINE" | cut -d'_' -f1)
+
+echo "Running subject: $SUBJ_NUM"
+
 # run script
-./smooth_prepost.sh 5191 2
+./smooth_prepost.sh "$SUBJ_NUM" 2

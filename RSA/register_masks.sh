@@ -10,21 +10,21 @@ for sub_id in $(cat sublist_initials.txt); do
     mkdir -p transformed_masks/sub-${SUBJECT_ID}/
     mkdir -p transformed_masks/sub-${SUBJECT_ID}/roi_t/
 
-    #antsApplyTransforms \
-    #-d 3 \
-    #-i ../../R01-fmri/fmriprep_pepolar/sourcedata/freesurfer/sub-${SUBJECT_ID}/mri/aparc+aseg.nii.gz \
-    #-r ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_desc-preproc_T1w.nii.gz \
-    #-t ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_from-fsnative_to-T1w_mode-image_xfm.txt \
-    #-o ./transformed_masks/sub-${SUBJECT_ID}/aparc+aseg_in_T1w.nii.gz \
-    #-n NearestNeighbor
-
     antsApplyTransforms \
     -d 3 \
     -i ../../R01-fmri/fmriprep_pepolar/sourcedata/freesurfer/sub-${SUBJECT_ID}/mri/aparc+aseg.nii.gz \
-    -r ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_desc-preproc_T1w.nii.gz \
-    -t ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_from-fsnative_to-T1w_mode-image_xfm.txt \
+    -r ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_acq-mprage_desc-preproc_T1w.nii.gz \
+    -t ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/anat/sub-${SUBJECT_ID}_acq-mprage_from-fsnative_to-T1w_mode-image_xfm.txt \
     -o ./transformed_masks/sub-${SUBJECT_ID}/aparc+aseg_in_T1w.nii.gz \
     -n NearestNeighbor
+
+#    antsApplyTransforms \
+#    -d 3 \
+#    -i ../../R01-fmri/fmriprep_pepolar/sourcedata/freesurfer/sub-${SUBJECT_ID}/mri/aparc+aseg.nii.gz \
+#    -r ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_desc-preproc_T1w.nii.gz \
+#    -t ../../R01-fmri/fmriprep_pepolar/sub-${SUBJECT_ID}/ses-3/anat/sub-${SUBJECT_ID}_ses-3_acq-mprage_from-fsnative_to-T1w_mode-image_xfm.txt \
+#    -o ./transformed_masks/sub-${SUBJECT_ID}/aparc+aseg_in_T1w.nii.gz \
+#    -n NearestNeighbor
 
     antsApplyTransforms \
     -d 3 \

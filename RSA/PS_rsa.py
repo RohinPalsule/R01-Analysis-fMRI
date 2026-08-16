@@ -62,7 +62,7 @@ for mask in masks:
 
 		#save as text file
 		#subjoutfile = "%s_prepost_%s.txt"%(sbj,mask)
-		subjoutfile = "./ROI_RSA/%s_prepost_3_runs_%s.txt"%(sbj,mask)
+		subjoutfile = "./ROI_RSA/%s_new_prepost_3_runs_%s.txt"%(sbj,mask)
 	
 		# convert to similairty (1-rs) before output
 		N.savetxt(subjoutfile,1-rs.samples,fmt="%.8f")

@@ -9,7 +9,7 @@
 #SBATCH --time=24:00:00
 #SBATCH --mail-type=end               ## send email when the job ends
 #SBATCH --mail-user=rapalsul@uci.edu  ## use this email address
-#SBATCH --array=1-11 # Arrays depending on length of sublist
+#SBATCH --array=1-10 # Arrays depending on length of sublist
 
 # Load environment
 source ~/.bashrc
