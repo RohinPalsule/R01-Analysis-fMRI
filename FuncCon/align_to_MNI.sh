@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: $0 <subid> <run_type>"
+    echo "Usage: $0 <subid>"
     echo ""
     echo "Arguments:"
     echo "  subid   "

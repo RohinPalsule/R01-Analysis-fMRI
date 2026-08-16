@@ -44,18 +44,19 @@ def analyze_prepost(npz_name:str="rsa_results.npz"):
     betas = 0 # If you have multiple beta comparisons can adjust
 
     #subject_list = ['1181','1185','1202','1211','1224','1227']
-with open("sublist_initials.txt", "r") as f:
-    subject_list = [line.strip().split("_")[0] for line in f if line.strip()]
+    with open("sublist_initials.txt", "r") as f:
+        subject_list = [line.strip().split("_")[0] for line in f if line.strip()]
 
-subjects = len(subject_list)
+    subjects = len(subject_list)
 
-masks = ['l_lo','r_lo','l_erc','r_erc','l_tpo','r_tpo','l_hip','r_hip',
-         'l_put','r_put','search_l_put_dilD_3.45mm','search_l_hip_dilD_3.45mm']
+    masks = ['l_lo','r_lo','l_erc','r_erc','l_tpo','r_tpo','l_hip','r_hip',
+            'l_put','r_put']
 
-betaseries = ['new_prepost']
-thisbeta = betaseries[betas]
+    betaseries = ['new_prepost']
+    thisbeta = betaseries[betas]
 
-roi_rsa_result = [[] for _ in masks]    # directory from which we are working
+    roi_rsa_result = [[] for _ in masks]    # directory from which we are working
+
     dir = os.getcwd()
 
     rsa_dir = os.path.join(".","ROI_RSA")
