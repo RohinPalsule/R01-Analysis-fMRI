@@ -11,7 +11,7 @@ cd ${SLDIR}
 MASKS="b_gray"
 COMPS="UCI_new"
 CMRR_IDS="5152 5153 5155 5156 5159"
-
+SMS_IDS="5216 5214 5203 5169 5201"
 for mask in $MASKS
 do
 	for comparison in $COMPS	
