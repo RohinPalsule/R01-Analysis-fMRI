@@ -1,0 +1,38 @@
+#!/bin/bash
+#SBATCH --job-name=func_con
+#SBATCH -A bornstea_lab
+#SBATCH --nodes=1
+#SBATCH --time=24:00:00
+#SBATCH --mail-type=end
+#SBATCH --mail-user=rumil@uci.edu
+#SBATCH --mem=32G
+#SBATCH --output=slurm-%A_%a.out
+#SBATCH --error=slurm-%A_%a.err
+#SBATCH --array=1
+
+# last edited: 8/22/26 RL
+
+SUBS=($(cat sublist_rumi.txt))
+SUB_ID=${SUBS[$SLURM_ARRAY_TASK_ID-1]} #subtracts 1 from array number, so it's 0 indexing
+
+CONF_DIR="../../R01-fmri/fmriprep_pepolar/sub-${SUB_ID}/ses-3/func"
+
+for f in ${CONF_DIR}/*ses-3_task-StudyGW_desc-confounds_timeseries.tsv; do
+    python3 - <<EOF
+import pandas as pd
+
+df = pd.read_csv("$f", sep="\t")
+df = df[['global_signal', 'global_signal_power2', 'csf', 'csf_power2', 'white_matter', 'white_matter_power2', 'csf_wm', 'trans_x', 'trans_x_power2', 'trans_y', 'trans_y_power2', 'trans_z', 'trans_z_power2', 'rot_x', 'rot_x_power2', 'rot_y', 'rot_y_power2', 'rot_z', 'rot_z_power2']]
+
+out_file = "$f".replace(
+    "_desc-confounds_timeseries.tsv",
+    "_desc-confounds_timeseries_filtered.tsv"
+)
+
+df.to_csv(out_file, sep="\t", index=False)
+print(f"Saved {out_file}")
+EOF
+done
+
+python3 seed_connectivity_rumi.py $SUB_ID
+echo "All done!"
