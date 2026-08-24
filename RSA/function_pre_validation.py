@@ -110,6 +110,8 @@ class function_pre_validation(Measure):
                         center_data=False)
         
         ### split up the data set into pre and post ###
+        dataset = dataset[dataset.sa.phase == 1]
+        # Make sure only pre
         run_a = dataset[dataset.sa.run == 1]
         run_b = dataset[dataset.sa.run == 3]
         

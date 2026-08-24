@@ -94,7 +94,6 @@ ds = fmri_dataset(fname,mask=slmask)
 ds.sa['phase'] = phase[:]
 ds.sa['run'] = run[:]
 ds.sa['node'] = node[:]
-ds = ds[ds.sa['phase']==1]
 # Keep it just pre :)
 	#similarity measure
 	#sl_funcs = function_prepost_react2('correlation',1,niter)
