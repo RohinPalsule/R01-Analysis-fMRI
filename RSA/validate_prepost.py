@@ -69,7 +69,7 @@ def validate_prepost(npz_name:str="rsa_validation_results.npz"):
 
             # length is num of run comparisons
             subdata = [np.mean(simdata[pair]) for pair in [(1, 2), (1, 3), (2, 3)]]
-
+            print(f"Subject {subject_list[s]}, Mask {mask}: {subdata}")
             # # Averages each bin per participant where each mean is per edge bin
             # subdata = [np.mean(simdata[0]),np.mean(simdata[1]), np.mean(simdata[2]),np.mean(simdata[3]),np.mean(simdata[4])]
             maskdata.append(subdata)
