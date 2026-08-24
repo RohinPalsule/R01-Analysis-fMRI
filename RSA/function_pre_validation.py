@@ -14,7 +14,7 @@ from prsa import perm_z
 import matplotlib.pyplot as plt
 masktype = sys.argv[2]
 tester = 1
-class validate_prepost(Measure):
+class function_pre_validation(Measure):
     def __init__(self, metric, output, niter, sample_attributes):
         Measure.__init__(self)
 
@@ -34,33 +34,49 @@ class validate_prepost(Measure):
         dist1,dist2,dist3,dist4,dist5 = extract_shortest_paths(edges)
 
         # Initialized rsa mask that's shape is the length of the sample attributes / 2 since we compare post vs. pre
-        ## CHANGES: removed /2 because just inputting the pre data
-        dist_num_rsa = zeros((int(len(sa['node'])),int(len(sa['node'])))) 
+        dist_num_rsa = zeros((int(len(sa['node'])/2),int(len(sa['node'])/2))) 
 
         # Initializing for loops below, where n = length of one side of the matrix above
         n = len(dist_num_rsa)
-        same_node_idx = []
+        one_dist_idx = []
+        two_dist_idx = []
+        three_dist_idx = []
+        four_dist_idx = []
+        five_dist_idx = []
 
         for x in range(n): # for every line
 
             for y in range(x+1,n): # for every line one ahead of x (only doing forward comparison)
                 
-                if sa['run'][x] != sa['run'][y]: # only do across run comparisons
+                # if sa['run'][x] != sa['run'][y]: # Removing this bc doing run by run
                 
-                    if sa['node'][x] == sa['node'][y]: # only doing across node comparisons
-                    
-                        same_node_idx.append([x,y])
+                if sa['node'][x] != sa['node'][y]: # only doing across node comparisons
+                
+                    # These get the indicies in the volinfo (also the index of the n x n matrix) that correspond for each edge distance comparison
+                    if ([sa['node'][x],sa['node'][y]] in dist1)|([sa['node'][y],sa['node'][x]] in dist1):                         
+                        one_dist_idx.append([x,y])	#this is comparing one edge (direct pair)
+                        
+                    elif ([sa['node'][x],sa['node'][y]] in dist2)|([sa['node'][y],sa['node'][x]] in dist2):                          
+                        two_dist_idx.append([x,y])	#this is comparing two edge dist
+
+                    elif ([sa['node'][x],sa['node'][y]] in dist3)|([sa['node'][y],sa['node'][x]] in dist3):
+                        three_dist_idx.append([x,y])	#this is comparing three edge dist
+
+                    elif ([sa['node'][x],sa['node'][y]] in dist4)|([sa['node'][y],sa['node'][x]] in dist4):
+                        four_dist_idx.append([x,y])   #this is comparing four edge dist
+
+                    elif ([sa['node'][x],sa['node'][y]] in dist5)|([sa['node'][y],sa['node'][x]] in dist5):
+                        five_dist_idx.append([x,y])	#this is comparing five edge dist
 
         # Create a 3-D array mask where the shape is (n,n,len(idxs)) and each [:,:,x] is the (x+1)th distance boolean array
-        idxs = [same_node_idx]
+        idxs = [one_dist_idx,two_dist_idx,three_dist_idx,four_dist_idx,five_dist_idx]
         for i,idx_data in enumerate(idxs):
             for dist_x,dist_y in idx_data:
-                dist_num_rsa[int(dist_x),int(dist_y)] = i+1 # Add the number corresponding to same node
-        # dist_num_rsa contains a matrix of 0 (not an edge i.e. same nodes, same runs, etc.), 1 (same node))
+                dist_num_rsa[int(dist_x),int(dist_y)] = i+1 # Add the number corresponding to edge distance to this numeric rsa matrix
+        # dist_num_rsa contains a matrix of 0 (not an edge i.e. same nodes, same runs, etc.), 1 (edges), 2,3,4,5 (all edge distances away)
 
         # self.masks makes the 3-D array only containing True and False, where in the dist_num_rsa[:,:,1] all the indices that were edges are marked as True
-        self.masks = (dist_num_rsa == 1)[..., None]
-        ### CHANGES only N,N,1 because one comparison
+        self.masks = dist_num_rsa[..., None] == arange(1,6)
 
         # These are the true indices (0:n)
         node_max = int(numpy.max(sa['node'])) # 12
@@ -94,16 +110,17 @@ class validate_prepost(Measure):
                         center_data=False)
         
         ### split up the data set into pre and post ###
-        pre = dataset[dataset.sa.phase == 1]
-        ## Should just be every value
+        run_a = dataset[dataset.sa.run == 1]
+        run_b = dataset[dataset.sa.run == 3]
         
         ### calculate the dsm separately for each phase ###
-        dsm_pre = self.dsm(pre)
-        
-        dsm_pre = 1-dsm_pre.samples
+        dsm_run_a = self.dsm(run_a)
+        dsm_run_b = self.dsm(run_b)
+        dsm_run_a = 1-dsm_run_a.samples
+        dsm_run_b = 1-dsm_run_b.samples
         
         ### calculate the difference to determine representational change ###
-        
+        dsm_diff = numpy.subtract(arctanh(dsm_run_b),arctanh(dsm_run_a))
         self.tester +=1
 
         # Don't need below because we do it in random anyway but just in case
@@ -121,7 +138,7 @@ class validate_prepost(Measure):
         rand_stats = []
         for iter in range(self.niter):
             # Recreate the DSM with new indices where self.shuffled_idx_arr is a list of indices of shape iterations X axis CHANGE HERE
-            random_dsm = dsm_pre[ix_(self.shuffled_idx_arr[iter][0], self.shuffled_idx_arr[iter][1])]
+            random_dsm = dsm_diff[ix_(self.shuffled_idx_arr[iter][0], self.shuffled_idx_arr[iter][1])]
             
             # # See the init comments near mask for help understanding structure
             # rand_dist1 = random_dsm[self.masks[:,:,0]]
@@ -138,12 +155,10 @@ class validate_prepost(Measure):
             # rand_fourdist_mean = numpy.mean(rand_dist4)        
             # rand_fivedist_mean = numpy.mean(rand_dist5)
 
-            rand_vals = numpy.array([random_dsm[self.masks[:,:,0]]])
-            rand_means = numpy.mean(rand_vals)
-            rand_stats.append(rand_means)
+            rand_means = numpy.array([numpy.mean(random_dsm[self.masks[:,:,k]]) for k in range(5)])
             # Do edge - non_edge but get the mean of each edge dist with equal weighting
-            # rand_edge_nonedge_diff = rand_means[0] - 0.25*(rand_means[1] + rand_means[2] + rand_means[3] + rand_means[4])
-            # rand_stats.append(rand_edge_nonedge_diff)
+            rand_edge_nonedge_diff = rand_means[0] - 0.25*(rand_means[1] + rand_means[2] + rand_means[3] + rand_means[4])
+            rand_stats.append(rand_edge_nonedge_diff)
 
             # Print commands to check stuff
             if (iter == 0)&(self.tester == 2):

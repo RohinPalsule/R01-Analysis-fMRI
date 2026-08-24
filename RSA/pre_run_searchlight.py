@@ -28,7 +28,7 @@ import sys
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 ### import custom searchlight function ###
-from validation_prepost_function import *
+from function_pre_validation import *
 from get_graph_distances import extract_shortest_paths
 ### set up expriment info ###
 expdir = './'
@@ -94,20 +94,24 @@ ds = fmri_dataset(fname,mask=slmask)
 ds.sa['phase'] = phase[:]
 ds.sa['run'] = run[:]
 ds.sa['node'] = node[:]
-
 ds = ds[ds.sa['phase']==1]
-#### running just pre ####
-
-
+# Keep it just pre :)
+	#similarity measure
+	#sl_funcs = function_prepost_react2('correlation',1,niter)
+	#for testing with whole roi
+	#results = sl_func(ds)
+	#os.chdir("/work/03158/smn776/lonestar/PS_Pilot/results/searchlight")
+	#subjoutfile = "%s_prepost_%s_%s.txt"%(sbj,comparison,mask)
+	#savetxt(subjoutfile,results,fmt="%.8f")
 print(ds)
 print(ds.sa)
-sl_func = validate_prepost('correlation',1,niter,ds.sa)
+sl_func = function_pre_validation('correlation',1,niter,ds.sa)
 #run the searchlight
 sl = sphere_searchlight(sl_func,radius = 3)
 sl_map = sl(ds)
 print(sl_map)
 print("searchlight complete")
-comparisons = ["edge_nonedge_diff"]
+comparisons = ["run3_run1_diff"]
 for i, name in enumerate(comparisons):
 	#save out map
 	subjoutfile = resultdir+'/%s_%s_runs_smoothed_prepost_sl_%s_iterations_%s_%s_2mm.nii.gz'%(sbj,runtype,niter,name,mask)
