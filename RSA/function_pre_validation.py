@@ -48,7 +48,7 @@ class function_pre_validation(Measure):
 
             for y in range(x+1,n): # for every line one ahead of x (only doing forward comparison)
                 
-                if sa['run'][x] == sa['run'][y]: # making it same run, since comparing across runs
+                if sa['run'][x] == 1: # making it same run, since comparing across runs
                 
                     if sa['node'][x] != sa['node'][y]: # only doing across node comparisons
                     
@@ -100,7 +100,8 @@ class function_pre_validation(Measure):
         self.shuffled_idx_arr = shuffled_idx
         # First iteration is the true index
         self.shuffled_idx_arr[0] = [arange(dist_num_rsa.shape[0]),arange(dist_num_rsa.shape[1])]
-        
+        print(self.shuffled_idx_arr[0])
+        print(self.shuffled_idx_arr[1])
     def __call__(self, dataset):
     
         self.dsm = rsa.PDist(\
