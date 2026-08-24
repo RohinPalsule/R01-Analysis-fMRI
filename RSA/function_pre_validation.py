@@ -87,12 +87,11 @@ class function_pre_validation(Measure):
         for _ in range(niter):
             random.shuffle(node_idx) # shuffles 1-12
             shuffled = []
-            for s in range(run_max): # for s in 0-2 or 0-3
-                # Takes the indices 1-12 and randomizes them, and then keeps that consistant for every run (so the ordering of each block of 12 is the same across runs)
-                block = row_idx[s*node_max:(s+1)*node_max]
-                shuffled.append([block[i] for i in node_idx])
-                # shuffled becomes a list of lists where each list is the ordering of a run, and then the code below shuffles the runs
-                random.shuffle(shuffled)
+            # Takes the indices 1-12 and randomizes them, and then keeps that consistant for every run (so the ordering of each block of 12 is the same across runs)
+            block = row_idx[0:node_max]
+            shuffled.append([block[i] for i in node_idx])
+            # shuffled becomes a list of lists where each list is the ordering of a run, and then the code below shuffles the runs
+            random.shuffle(shuffled)
             # Flattens the list of lists into one list where the nodes are randomized within runs (consistently) and then the runs are randomized
             shuffled = [item for sublist in shuffled for item in sublist]
             shuffled_idx.append([shuffled,shuffled])
