@@ -6,7 +6,7 @@ import pandas as pd
 import networkx as nx
 from plot_prepost import plot_validation_prepost
 
-def validate_prepost(npz_name:str="rsa_validation_results.npz"):
+def validate_prepost(npz_name:str="rsa_validation_results_post.npz"):
     """Saves prepost roi rsa data to an npz"""
     betas = 0 # If you have multiple beta comparisons can adjust
 
@@ -48,10 +48,10 @@ def validate_prepost(npz_name:str="rsa_validation_results.npz"):
             prepost_size = int(rsa.shape[0]/2)
 
             pre = rsa[:prepost_size, :prepost_size]
-            # post = rsa[prepost_size:prepost_size*2, prepost_size:prepost_size*2]
+            post = rsa[prepost_size:prepost_size*2, prepost_size:prepost_size*2]
             # diff = post - pre
             
-            n = pre.shape[0]
+            n = post.shape[0]
 
             simdata = {
                 (1, 2): [],
@@ -65,7 +65,7 @@ def validate_prepost(npz_name:str="rsa_validation_results.npz"):
                     if run[x] != run[y] and node[x] == node[y]:
 
                         pair = tuple(sorted([run[x], run[y]]))
-                        simdata[pair].append(pre[x, y])
+                        simdata[pair].append(post[x, y])
 
             # length is num of run comparisons
             subdata = [np.mean(simdata[pair]) for pair in [(1, 2), (1, 3), (2, 3)]]

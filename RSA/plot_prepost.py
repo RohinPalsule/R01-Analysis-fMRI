@@ -41,7 +41,7 @@ def plot_prepost(datafile:str='rsa_results.npz'):
         plt.show()
         plt.savefig(f"./figures/{label}_roi_rsa_3_runs.png")
 
-def plot_validation_prepost(filename:str='rsa_validation_results.npz'):
+def plot_validation_prepost(filename:str='rsa_validation_results_post.npz'):
 
     datafile = np.load(f"./ROI_RSA/{filename}",allow_pickle=True)
 
