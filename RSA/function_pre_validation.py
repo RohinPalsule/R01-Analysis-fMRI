@@ -34,7 +34,8 @@ class function_pre_validation(Measure):
         dist1,dist2,dist3,dist4,dist5 = extract_shortest_paths(edges)
 
         # Initialized rsa mask that's shape is the length of the sample attributes / 2 since we compare post vs. pre
-        dist_num_rsa = zeros((int(len(sa['node'])/2),int(len(sa['node'])/2))) 
+        # Dividing by 6 bc it should just be one run in pre
+        dist_num_rsa = zeros((int(len(sa['node'])/6),int(len(sa['node'])/6))) 
 
         # Initializing for loops below, where n = length of one side of the matrix above
         n = len(dist_num_rsa)
@@ -48,7 +49,7 @@ class function_pre_validation(Measure):
 
             for y in range(x+1,n): # for every line one ahead of x (only doing forward comparison)
                 
-                if sa['run'][x] == 1: # making it same run, since comparing across runs
+                if sa['run'][x] == sa['run'][y]: # since only first run lines it should stay the same
                 
                     if sa['node'][x] != sa['node'][y]: # only doing across node comparisons
                     
@@ -141,21 +142,6 @@ class function_pre_validation(Measure):
         for iter in range(self.niter):
             # Recreate the DSM with new indices where self.shuffled_idx_arr is a list of indices of shape iterations X axis CHANGE HERE
             random_dsm = dsm_diff[ix_(self.shuffled_idx_arr[iter][0], self.shuffled_idx_arr[iter][1])]
-            
-            # # See the init comments near mask for help understanding structure
-            # rand_dist1 = random_dsm[self.masks[:,:,0]]
-            # rand_dist2 = random_dsm[self.masks[:,:,1]]
-            # rand_dist3 = random_dsm[self.masks[:,:,2]]
-            # rand_dist4 = random_dsm[self.masks[:,:,3]]
-            # rand_dist5 = random_dsm[self.masks[:,:,4]]
-            
-            # ### pre-calculate means for efficiency (USING NANMEAN BC THERE ARE NAN VALUES BUT SHOULD LOOK INTO) ###
-            # # might have to do with arctanh divide by 0 error
-            # rand_onedist_mean = numpy.mean(rand_dist1)
-            # rand_twodist_mean = numpy.mean(rand_dist2)
-            # rand_threedist_mean = numpy.mean(rand_dist3)
-            # rand_fourdist_mean = numpy.mean(rand_dist4)        
-            # rand_fivedist_mean = numpy.mean(rand_dist5)
 
             rand_means = numpy.array([numpy.mean(random_dsm[self.masks[:,:,k]]) for k in range(5)])
             # Do edge - non_edge but get the mean of each edge dist with equal weighting
