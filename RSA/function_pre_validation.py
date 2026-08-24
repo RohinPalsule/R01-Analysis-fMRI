@@ -48,25 +48,25 @@ class function_pre_validation(Measure):
 
             for y in range(x+1,n): # for every line one ahead of x (only doing forward comparison)
                 
-                # if sa['run'][x] != sa['run'][y]: # Removing this bc doing run by run
+                if sa['run'][x] == sa['run'][y]: # making it same run, since comparing across runs
                 
-                if sa['node'][x] != sa['node'][y]: # only doing across node comparisons
-                
-                    # These get the indicies in the volinfo (also the index of the n x n matrix) that correspond for each edge distance comparison
-                    if ([sa['node'][x],sa['node'][y]] in dist1)|([sa['node'][y],sa['node'][x]] in dist1):                         
-                        one_dist_idx.append([x,y])	#this is comparing one edge (direct pair)
-                        
-                    elif ([sa['node'][x],sa['node'][y]] in dist2)|([sa['node'][y],sa['node'][x]] in dist2):                          
-                        two_dist_idx.append([x,y])	#this is comparing two edge dist
+                    if sa['node'][x] != sa['node'][y]: # only doing across node comparisons
+                    
+                        # These get the indicies in the volinfo (also the index of the n x n matrix) that correspond for each edge distance comparison
+                        if ([sa['node'][x],sa['node'][y]] in dist1)|([sa['node'][y],sa['node'][x]] in dist1):                         
+                            one_dist_idx.append([x,y])	#this is comparing one edge (direct pair)
+                            
+                        elif ([sa['node'][x],sa['node'][y]] in dist2)|([sa['node'][y],sa['node'][x]] in dist2):                          
+                            two_dist_idx.append([x,y])	#this is comparing two edge dist
 
-                    elif ([sa['node'][x],sa['node'][y]] in dist3)|([sa['node'][y],sa['node'][x]] in dist3):
-                        three_dist_idx.append([x,y])	#this is comparing three edge dist
+                        elif ([sa['node'][x],sa['node'][y]] in dist3)|([sa['node'][y],sa['node'][x]] in dist3):
+                            three_dist_idx.append([x,y])	#this is comparing three edge dist
 
-                    elif ([sa['node'][x],sa['node'][y]] in dist4)|([sa['node'][y],sa['node'][x]] in dist4):
-                        four_dist_idx.append([x,y])   #this is comparing four edge dist
+                        elif ([sa['node'][x],sa['node'][y]] in dist4)|([sa['node'][y],sa['node'][x]] in dist4):
+                            four_dist_idx.append([x,y])   #this is comparing four edge dist
 
-                    elif ([sa['node'][x],sa['node'][y]] in dist5)|([sa['node'][y],sa['node'][x]] in dist5):
-                        five_dist_idx.append([x,y])	#this is comparing five edge dist
+                        elif ([sa['node'][x],sa['node'][y]] in dist5)|([sa['node'][y],sa['node'][x]] in dist5):
+                            five_dist_idx.append([x,y])	#this is comparing five edge dist
 
         # Create a 3-D array mask where the shape is (n,n,len(idxs)) and each [:,:,x] is the (x+1)th distance boolean array
         idxs = [one_dist_idx,two_dist_idx,three_dist_idx,four_dist_idx,five_dist_idx]
@@ -77,7 +77,7 @@ class function_pre_validation(Measure):
 
         # self.masks makes the 3-D array only containing True and False, where in the dist_num_rsa[:,:,1] all the indices that were edges are marked as True
         self.masks = dist_num_rsa[..., None] == arange(1,6)
-
+        print("dist_num_rsa:", dist_num_rsa.shape)
         # These are the true indices (0:n)
         node_max = int(numpy.max(sa['node'])) # 12
         run_max = len(numpy.unique(sa['run'])) # 3-4
