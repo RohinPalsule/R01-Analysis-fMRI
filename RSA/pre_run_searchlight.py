@@ -110,7 +110,7 @@ sl = sphere_searchlight(sl_func,radius = 3)
 sl_map = sl(ds)
 print(sl_map)
 print("searchlight complete")
-comparisons = ["run3_run1_diff"]
+comparisons = ["run3_run2_diff"]
 for i, name in enumerate(comparisons):
 	#save out map
 	subjoutfile = resultdir+'/%s_%s_runs_smoothed_prepost_sl_%s_iterations_%s_%s_2mm.nii.gz'%(sbj,runtype,niter,name,mask)

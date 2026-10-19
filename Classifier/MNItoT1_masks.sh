@@ -38,7 +38,7 @@ for SUBNUM in $SUBS; do
       -i $MASK \
       -o "$OUTDIR/${BASENAME%.nii*}_transformed.nii.gz"  \
       -r $BOLDDIR/${SUBNAME}/ses-2/func/${SUBNAME}_ses-2_task-Localizer_run-1_space-T1w_boldref.nii.gz \
-      -t $BOLDDIR/${SUBNAME}/anat/${SUBNAME}_acq-mprage_from-MNI152NLin6Asym_to-T1w_mode-image_xfm.h5 \
+      -t $BOLDDIR/${SUBNAME}/anat/${SUBNAME}_acq-mprage_from-MNI152NLin2009cAsym_to-T1w_mode-image_xfm.h5 \
       -n NearestNeighbor
 
     fslmaths "$OUTDIR/${BASENAME%.nii*}_transformed.nii.gz" -kernel sphere 3.45 -dilD "$OUTDIR/${BASENAME%.nii*}_transformed_dilD_345.nii.gz"

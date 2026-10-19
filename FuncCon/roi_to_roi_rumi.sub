@@ -1,0 +1,61 @@
+#!/bin/bash
+#SBATCH --job-name=roi_to_roi
+#SBATCH -A bornstea_lab
+#SBATCH --nodes=1
+#SBATCH --time=24:00:00
+#SBATCH --mail-type=end
+#SBATCH --mail-user=rumil@uci.edu
+#SBATCH --mem=32G
+#SBATCH --output=slurm-%A_%a.out
+#SBATCH --error=slurm-%A_%a.err
+#SBATCH --array=1-12
+
+# 9/7/26 RL: created
+# 9/17/26 RL: removing global signal confounds (global_signal and global_signal_power2), changed file path for filt confound
+
+SUBS=($(cat sublist_rumi.txt))
+SUB_ID=${SUBS[$SLURM_ARRAY_TASK_ID-1]}
+
+#og confounds file
+CONF_DIR="../../R01-fmri/fmriprep_pepolar/sub-${SUB_ID}/ses-3/func"
+ORIG_CONF="${CONF_DIR}/sub-${SUB_ID}_ses-3_task-StudyGW_desc-confounds_timeseries.tsv"
+
+#filtered confounds file
+FILT_DIR="results/filt_confounds_rumi"
+FILT_CONF="${FILT_DIR}/sub-${SUB_ID}_ses-3_task-StudyGW_desc-confounds_timeseries_filtered.tsv"
+
+echo "Creating/overwriting filtered confounds for subject $SUB_ID"
+
+python3 - <<EOF
+import pandas as pd
+
+df = pd.read_csv("$ORIG_CONF", sep="\t")
+
+df = df[[
+    'csf',
+    'csf_power2',
+    'white_matter',
+    'white_matter_power2',
+    'csf_wm',
+    'trans_x',
+    'trans_x_power2',
+    'trans_y',
+    'trans_y_power2',
+    'trans_z',
+    'trans_z_power2',
+    'rot_x',
+    'rot_x_power2',
+    'rot_y',
+    'rot_y_power2',
+    'rot_z',
+    'rot_z_power2'
+]]
+
+df.to_csv("$FILT_CONF", sep="\t", index=False)
+
+print("Saved $FILT_CONF")
+EOF
+
+python3 roi_to_roi_rumi.py $SUB_ID
+
+echo "Finished ROI-to-ROI for subject $SUB_ID"

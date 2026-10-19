@@ -15,4 +15,4 @@ conda activate mindstorm_env
 cd /share/crsp/lab/bornstea/share/R01-Analysis/Classifier
 
 # run script
-./smooth_prepost.sh 5160 2
+./smooth_localizer.sh 1276 2

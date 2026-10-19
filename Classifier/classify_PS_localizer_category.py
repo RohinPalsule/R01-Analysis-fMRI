@@ -26,7 +26,7 @@ import sys
 
 expdir = './'
 
-subjects = [5152]
+subjects = [1276]
 #masks = ['jacksonROIS/b_phc','jacksonROIS/b_prc']
 
 for sbj in subjects: # because you're inputting a number it wants to parse it if you use a for loop
@@ -43,7 +43,7 @@ for sbj in subjects: # because you're inputting a number it wants to parse it if
 
 	subjdir = expdir+'/sub-%s'%(sbj)
 
-	maskdir = expdir + f'/cluster_maps/sub-{sbj}/transformed/dilD_345/b_masks/'
+	maskdir = expdir + '/cluster_maps/group_maps/MNINLin2009Asym/group/individual_dilD/transformed/' # f'/cluster_maps/sub-{sbj}/transformed/dilD_345/b_masks/'
 
 	boldir = expdir + f'/sub-{sbj}/smoothed_localizer/'
 

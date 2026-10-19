@@ -1,4 +1,5 @@
-#last edited: 8/22/26 RL
+#last edited: 8/31/26 RL
+#8/31/26 RL: a script that runs a seed-to-voxel func con between left HC and gm. edited so it uses all blocks of study phase, does not split early vs. late.
 
 #FuncCon
 import os
@@ -17,7 +18,7 @@ import pandas as pd
 class SeedConnectivity():
     def __init__(self,sub_id:int=5159,bold_path:str='../../R01-fmri/fmriprep_pepolar/',seed_region:str="Hippocampus"):
         self.ID = sub_id
-        self.func_filename = os.path.join(bold_path,f'sub-{self.ID}','ses-3','func',f'sub-{self.ID}_ses-3_task-StudyGW_space-MNI152NLin6Asym_res-2_desc-preproc_bold.nii.gz')
+        self.func_filename = os.path.join(bold_path,f'sub-{self.ID}','ses-3','func',f'sub-{self.ID}_ses-3_task-StudyGW_space-MNI152NLin2009cAsym_desc-preproc_bold.nii.gz') #8/26/26 RL: RP changed so i changed to match
 
         # Need to deside what we want to use as confounds
         self.confound_filename = os.path.join(bold_path,f'sub-{self.ID}','ses-3','func',f'sub-{self.ID}_ses-3_task-StudyGW_desc-confounds_timeseries_filtered.tsv')
@@ -25,7 +26,7 @@ class SeedConnectivity():
         # THIS IS THE PCC FROM THE TUTORIAL, NEED TO CHANGE
         self.seed_sphere_coords = [(0, -52, 18)]
 
-        self.output_dir = Path.cwd() / "results" / "plot_seed_to_voxel_correlation_rumi" #put the output files in my rumi folder
+        self.output_dir = Path.cwd() / "results" / "plot_seed_to_voxel_correlation_allblocks_rumi" #8/31/26 RL: modified output folder name
         self.output_dir.mkdir(exist_ok=True, parents=True)
         self.seed_region=seed_region
         print(f"Output will be saved to: {self.output_dir}")
@@ -118,7 +119,7 @@ class SeedConnectivity():
         Need to adjust all hyperparameters + add mask (mask_img=)
         """
         if region == "gm":
-            mask_img = f"MNI_masks/sub-{self.ID}_b_gray_dilD_2mm.nii.gz"
+            mask_img = f"MNI_masks/sub-{self.ID}_b_gray_dilD_3.45mm.nii.gz" #8/26/26 RL: RP changed so i matched him
         elif region == "OFC":
             data = datasets.fetch_atlas_harvard_oxford("cort-maxprob-thr25-2mm")
             OFC = image.math_img("img == 33", img=data.maps)
@@ -256,7 +257,7 @@ class SeedConnectivity():
 
         return (early_func,late_func), (early_confound,late_confound)
     
-    def run_seed_con_differences(self):
+    def run_seed_con_differences(self): #8/31/26 RL: not used
         """
         Tuples are (early,late), saves 2 niftis w early and late in filename
         """
@@ -270,6 +271,6 @@ class SeedConnectivity():
 if __name__ == "__main__":
     sub_id=sys.argv[1] #indexes the subject number when u run something like python3 seed_connectivity.py 700
     FC = SeedConnectivity(sub_id=int(sub_id))
-    FC.run_seed_con_differences()
+    FC.get_seed_connectivity_nifti() #8/31/26 RL: changed from run_seed_con_diff function
     print("All done!")
 

@@ -8,9 +8,11 @@
 #SBATCH --mem=32G
 #SBATCH --output=slurm-%A_%a.out
 #SBATCH --error=slurm-%A_%a.err
-#SBATCH --array=1
+#SBATCH --array=1-12
 
-# last edited: 8/22/26 RL
+# last edited: 9/1/26 RL
+# 8/31/26 RL: changed array num to test running full study phase
+# 9/1/26 RL: changed array num again for all subs^
 
 SUBS=($(cat sublist_rumi.txt))
 SUB_ID=${SUBS[$SLURM_ARRAY_TASK_ID-1]} #subtracts 1 from array number, so it's 0 indexing
